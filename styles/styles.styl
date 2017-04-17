@@ -1,0 +1,65 @@
+$body-margin = 3 rem
+$game-info-board-gap = 1.5 rem
+$game-info-moves-indent = 1.5 rem
+
+$square-size = 11 rem
+$square-font-size = 10 rem
+
+$color-background = #fff
+$color-board-move-x = #ff4444
+$color-board-move-o = #4444ff
+$color-board-borders = #aaa
+
+$color-text-default = #333
+$color-move-default = #059
+$color-move-current = #095
+
+body
+  font: 14px "Century Gothic", Futura, sans-serif
+  margin: $body-margin
+  background: $color-background
+  color: $color-text-default
+
+.game
+  display: flex
+  flex-direction: row
+
+// board
+.square
+  height: $square-size
+  width: $square-size
+
+  float: left
+  margin-right: -1px
+  margin-top: -1px
+  padding: 0
+
+  text-align: center
+  font-size: $square-font-size
+  font-weight: bold
+  line-height: $square-size
+
+  background: $color-background
+  border: 1px solid $color-board-borders
+
+  &.x
+    color: $color-board-move-x
+
+  &.o
+    color: $color-board-move-o
+
+  &:focus
+    outline: none
+
+// game info
+.game-info
+  margin-left: $game-info-board-gap
+
+  ol, ul
+    padding-left: $game-info-moves-indent
+
+    a
+      color: $color-move-default
+
+      &.current-move
+        color: $color-move-current
