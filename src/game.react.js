@@ -1,103 +1,93 @@
 import React from 'react'
 
+import TicTacToe from './tictactoe'
 import Board from './board.react'
 
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
+
+let CHAR = {
+    [TicTacToe.X]: 'X',
+    [TicTacToe.O]: 'O',
 }
 
-
 class Game extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      history: [{
-        squares: Array(9).fill(null),
-      }],
-      stepNumber: 0,
-      xIsNext: true,
-    }
-  }
-  character() {
-    return this.state.xIsNext ? 'X' : 'O';
-  }
-  handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const squares = history[history.length - 1].squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    squares[i] = this.character();
-    this.setState({
-      history: history.concat([{
-        squares: squares,
-      }]),
-      stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
-    });
-  }
-  jumpTo(step) {
-    this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) ? false : true,
-    });
-  }
-  render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    constructor() {
+        super();
 
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = 'Next player: ' + this.character();
+        this.state = {
+            currentIndex: 0,
+            history: [
+                new TicTacToe(),
+            ],
+        }
     }
 
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Move #' + move :
-        'Game start';
-      const isCurrentStep = move == this.state.stepNumber;
-      return (
-        <li key={move}>
-          <a href="#"
-            className={isCurrentStep ? 'current-move' : ''}
-            onClick={() => this.jumpTo(move)}>{desc}</a>
-        </li>
-      );
-    });
+    handleClick(x, y) {
+        const gameState = this.state.history[this.state.currentIndex];
 
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            onClick={(i) => this.handleClick(i)}/>
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
-        </div>
-      </div>
-    );
-  }
+        // do nothing if the current game state has a winner
+        // or if the square is occupied
+        if (gameState.isGameOver || gameState.getSquare(x, y)) {
+            return;
+        }
+
+        // otherwise update
+        const history = this.state.history.slice(0, this.state.currentIndex + 1);
+        const newGameState = new TicTacToe(gameState);
+        newGameState.nextMove(x, y);
+        this.setState({
+            history: history.concat([newGameState]),
+            currentIndex: history.length,
+        });
+    }
+
+    jumpTo(index) {
+        this.setState({
+            currentIndex: index,
+        });
+    }
+
+    render() {
+        const history = this.state.history;
+        const current = history[this.state.currentIndex];
+
+        let status;
+        if (current.winner) {
+            status = 'Winner: ' + CHAR[current.winner];
+        } else if (current.isGameOver) {
+            status = 'Draw';
+        } else {
+            status = 'Next Player: ' + CHAR[current.activePlayer];
+        }
+
+        const moves = history.map((gameState, index) => {
+            const desc = index ?
+                'Move #' + index :
+                'Game Start';
+            const isCurrentMove = index == this.state.currentIndex;
+            return (
+                <li key={index}>
+                    <a href="#"
+                        className={isCurrentMove ? 'current-move' : null}
+                        onClick={() => this.jumpTo(index)}>{desc}</a>
+                </li>
+            );
+        });
+
+        return (
+            <div className="game">
+                <div className="game-board">
+                    <Board
+                        gameState={current}
+                        onClick={(x, y) => this.handleClick(x, y)}/>
+                </div>
+
+                <div className="game-info">
+                    <div>{status}</div>
+                    <ol>{moves}</ol>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default Game;
