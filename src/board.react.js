@@ -4,6 +4,7 @@ function Square(props) {
     return (
         <button
          className={'square ' + (props.value || '').toLowerCase()}
+         title={`Square ${props.x}, ${props.y}`}
          onClick={() => props.onClick()}>
             {props.value}
         </button>
@@ -14,6 +15,7 @@ export default function Board(props) {
     function renderSquare(x, y) {
         return (
             <Square
+             x={x} y={y}
              value={props.gameState.getSquare(x, y)}
              onClick={() => props.onClick(x, y)}/>
         )

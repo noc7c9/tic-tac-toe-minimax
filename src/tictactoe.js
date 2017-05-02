@@ -90,6 +90,18 @@ export default class TicTacToe {
         }
     }
 
+    toString() {
+        let rows = [];
+        for (let y = 0; y < 3; y++) {
+            let cells = [];
+            for (let x = 0; x < 3; x++) {
+                cells.push(this.getSquare(x, y) || ' ');
+            }
+            rows.push(cells.join(' '));
+        }
+        return rows.join('\n');
+    }
+
 }
 
 TicTacToe.X = PLAYER_X;
