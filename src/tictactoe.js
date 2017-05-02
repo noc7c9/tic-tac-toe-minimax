@@ -36,11 +36,11 @@ class TicTacToe {
     }
 
     getSquare(x, y) {
-        return this._board[y * 3 + x];
+        return this._board[this._coordsToIndex(x, y)];
     }
 
     nextMove(x, y) {
-        const index = y * 3 + x;
+        const index = this._coordsToIndex(x, y);
 
         if (this.winner != null) {
             throw "Error: game already over";
@@ -55,6 +55,27 @@ class TicTacToe {
             this.activePlayer = this.activePlayer == PLAYER_X ? PLAYER_O : PLAYER_X;
             this.turnNumber += 1;
         }
+    }
+
+    getMoves() {
+        let moves = [];
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                if (this.getSquare(x, y) == null) {
+                    moves.push([x, y]);
+                }
+            }
+        }
+        return moves;
+    }
+
+    _coordsToIndex(x, y) {
+        return y * 3 + x;
+    }
+    _indexToCoords(index) {
+        const y = index % 3;
+        const x = Math.floor(index / 3);
+        return [x, y];
     }
 
     _checkWinner() {
