@@ -10,36 +10,32 @@ function Square(props) {
     );
 }
 
-class Board extends React.Component {
-    renderSquare(x, y) {
+export default function Board(props) {
+    function renderSquare(x, y) {
         return (
             <Square
-             value={this.props.gameState.getSquare(x, y)}
-             onClick={() => this.props.onClick(x, y)}/>
+             value={props.gameState.getSquare(x, y)}
+             onClick={() => props.onClick(x, y)}/>
         )
     }
 
-    render() {
-        return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0, 0)}
-                    {this.renderSquare(1, 0)}
-                    {this.renderSquare(2, 0)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(0, 1)}
-                    {this.renderSquare(1, 1)}
-                    {this.renderSquare(2, 1)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(0, 2)}
-                    {this.renderSquare(1, 2)}
-                    {this.renderSquare(2, 2)}
-                </div>
+    return (
+        <div>
+            <div className="board-row">
+                {renderSquare(0, 0)}
+                {renderSquare(1, 0)}
+                {renderSquare(2, 0)}
             </div>
-        );
-    }
+            <div className="board-row">
+                {renderSquare(0, 1)}
+                {renderSquare(1, 1)}
+                {renderSquare(2, 1)}
+            </div>
+            <div className="board-row">
+                {renderSquare(0, 2)}
+                {renderSquare(1, 2)}
+                {renderSquare(2, 2)}
+            </div>
+        </div>
+    );
 }
-
-export default Board;

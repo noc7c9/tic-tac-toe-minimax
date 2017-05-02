@@ -1,6 +1,6 @@
 const DELAY = 1000;
 
-function randomAI(gameState) {
+export default function randomAI(gameState) {
     return new Promise((resolve, reject) => {
         const moves = gameState.getMoves();
         if (moves.length == 0) {
@@ -17,5 +17,3 @@ function randInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-export default randomAI;

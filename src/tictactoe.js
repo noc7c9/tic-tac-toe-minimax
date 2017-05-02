@@ -12,23 +12,24 @@ const lines = [
     [2, 4, 6],
 ];
 
-class TicTacToe {
+export default class TicTacToe {
 
     constructor(objToClone=null) {
-        if (objToClone == null) {
-            this.activePlayer = PLAYER_X;
-            this.turnNumber = 1;
-            this.winner = null;
+        this.activePlayer = PLAYER_X;
+        this.turnNumber = 1;
+        this.winner = null;
+        this._board = Array(9).fill(null);
+    }
 
-            this._board = Array(9).fill(null);
+    clone() {
+        let clone = new TicTacToe();
 
-        } else {
-            this.activePlayer = objToClone.activePlayer;
-            this.turnNumber = objToClone.turnNumber;
-            this.winner = objToClone.winner;
+        clone.activePlayer = this.activePlayer;
+        clone.turnNumber = this.turnNumber;
+        clone.winner = this.winner;
+        clone._board = this._board.slice();
 
-            this._board = objToClone._board.slice();
-        }
+        return clone
     }
 
     get isGameOver() {
@@ -93,5 +94,3 @@ class TicTacToe {
 
 TicTacToe.X = PLAYER_X;
 TicTacToe.O = PLAYER_O;
-
-export default TicTacToe;

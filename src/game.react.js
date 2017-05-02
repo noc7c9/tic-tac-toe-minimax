@@ -1,7 +1,6 @@
 import React from 'react'
 
 import TicTacToe from './tictactoe'
-import randomAI from './random-ai'
 
 import Board from './board.react'
 
@@ -11,11 +10,11 @@ let CHAR = {
     [TicTacToe.O]: 'O',
 }
 
-class Game extends React.Component {
-    constructor() {
-        super();
+export default class Game extends React.Component {
+    constructor(props) {
+        super(props);
 
-        this.ai = randomAI;
+        this.ai = props.ai;
 
         this.setState({
             currentIndex: 0,
@@ -85,7 +84,7 @@ class Game extends React.Component {
         // otherwise update
         const history = this.getState().history
             .slice(0, this.getState().currentIndex + 1);
-        const newGameState = new TicTacToe(gameState);
+        const newGameState = gameState.clone();
         newGameState.nextMove(x, y);
 
         this.setState({
@@ -148,5 +147,3 @@ class Game extends React.Component {
         );
     }
 }
-
-export default Game;
