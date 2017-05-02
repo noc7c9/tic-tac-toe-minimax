@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "browser-sync": "browser-sync start --server . --files public",
+    "browser-sync": "browser-sync start --reload-delay 200 --server . --files public",
     "build-js": "browserify src/app.js > public/js/bundle.js",
     "watch-js": "watchify src/app.js -o public/js/bundle.js -v",
     "build-css": "stylus styles/styles.styl -o public/css/styles.css",
