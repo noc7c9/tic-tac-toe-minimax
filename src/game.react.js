@@ -22,6 +22,7 @@ export default class Game extends React.Component {
                 new TicTacToe(),
             ],
             waitingForAI: false,
+            usingAI: true,
         });
     }
 
@@ -46,7 +47,8 @@ export default class Game extends React.Component {
         if (this.getState().waitingForAI) {
             return;
         }
-        if (this.playMove(x, y)) {
+        let wasValidMove = this.playMove(x, y);
+        if (wasValidMove && this.getState().usingAI) {
             // only let ai play if the move was valid
             this.aiMoves();
         }
@@ -54,8 +56,13 @@ export default class Game extends React.Component {
 
     handleJumpTo(index) {
         this.setState({
-            history: this.getState().history,
             currentIndex: index,
+        });
+    }
+
+    handleToggleAI() {
+        this.setState({
+            usingAI: !this.getState().usingAI,
         });
     }
 
@@ -140,6 +147,15 @@ export default class Game extends React.Component {
                         : <a href="#"
                            onClick={() => this.handleLetAIPlay()}>Let AI Play</a>
                     }
+
+                    <div>
+                        <a href="#"
+                         onClick={() => this.handleToggleAI()}>
+                            {this.state.usingAI
+                                ? "Turn AI Off"
+                                : "Turn AI On"}
+                        </a>
+                    </div>
 
                     <ol>{moves}</ol>
                 </div>
